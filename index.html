@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Mantenimiento</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="mantenimiento-container">
+        <h2>Registrar Mantenimiento</h2>
+        <form id="mantenimiento-form">
+            <label for="ubicacion">Ubicación:</label>
+            <input type="text" id="ubicacion" required><br><br>
+
+            <label for="equipo-id">ID de Equipo:</label>
+            <input type="number" id="equipo-id" required><br><br>
+
+            <label for="tipo">Tipo:</label>
+            <select id="tipo" required>
+                <option value="Computadora">Computadora</option>
+                <option value="Impresora">Impresora</option>
+            </select><br><br>
+
+            <label for="modelo">Modelo:</label>
+            <input type="text" id="modelo" required><br><br>
+
+            <label for="estado">Estado:</label>
+            <input type="text" id="estado" required><br><br>
+
+            <label for="notas">Notas:</label>
+            <textarea id="notas"></textarea><br><br>
+
+            <button type="submit">Registrar</button>
+        </form>
+        <div id="success-message" style="color: green;"></div>
+        <div id="error-message" style="color: red;"></div>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwRUNSxdEPU4wmJQQ9OPm7iZ-qZkqXfgPyHa47mPqjCJV5BwiTCXAS54sgV9Ksy1LT_Nw/exec'; // Reemplaza con la URL del backend de Google Apps Script
+        
+        document.getElementById('mantenimiento-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const data = {
+                ubicacion: document.getElementById('ubicacion').value,
+                equipoId: document.getElementById('equipo-id').value,
+                tipo: document.getElementById('tipo').value,
+                modelo: document.getElementById('modelo').value,
+                estado: document.getElementById('estado').value,
+                notas: document.getElementById('notas').value,
+            };
+
+            fetch(scriptURL, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('success-message').textContent = 'Mantenimiento registrado exitosamente.';
+                document.getElementById('mantenimiento-form').reset();
+            })
+            .catch(error => {
+                document.getElementById('error-message').textContent = 'Error al registrar mantenimiento.';
+            });
+        });
+    </script>
+</body>
+</html>
